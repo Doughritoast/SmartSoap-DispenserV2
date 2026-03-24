@@ -66,11 +66,11 @@ export default function HistoryScreen() {
     <Pressable
       onPress={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}
       style={({ pressed }) => [{ opacity: pressed ? 0.7 : 1 }]}
-      className="bg-white rounded-2xl p-4 mb-3 border border-border"
+      className="bg-surface rounded-2xl p-4 mb-3 border border-border"
     >
       <View className="flex-row gap-3">
         {/* Icon */}
-        <View className="w-12 h-12 bg-surface rounded-lg items-center justify-center">
+        <View className="w-12 h-12 bg-primary bg-opacity-20 rounded-lg items-center justify-center border border-primary border-opacity-30">
           <Text className="text-xl">{getEventTypeIcon(item.type)}</Text>
         </View>
 

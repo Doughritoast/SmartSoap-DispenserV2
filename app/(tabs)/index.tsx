@@ -41,7 +41,7 @@ export default function DashboardScreen() {
     <Pressable
       onPress={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}
       style={({ pressed }) => [{ opacity: pressed ? 0.7 : 1 }]}
-      className="bg-white rounded-2xl p-4 mb-3 border border-border"
+      className="bg-surface rounded-2xl p-4 mb-3 border border-border"
     >
       {/* Header */}
       <View className="flex-row justify-between items-start mb-3">
@@ -60,7 +60,7 @@ export default function DashboardScreen() {
       {/* Metrics Grid */}
       <View className="flex-row gap-3 mb-3">
         {/* Soap Level */}
-        <View className="flex-1 bg-surface rounded-lg p-3">
+        <View className="flex-1 bg-primary bg-opacity-20 rounded-lg p-3 border border-primary border-opacity-30">
           <Text className="text-xs text-muted font-semibold mb-1">SOAP</Text>
           <Text className="text-2xl font-bold text-primary">{item.soapLevel}%</Text>
           <View className="h-1 bg-border rounded-full mt-2 overflow-hidden">
@@ -77,7 +77,7 @@ export default function DashboardScreen() {
         </View>
 
         {/* Battery Level */}
-        <View className="flex-1 bg-surface rounded-lg p-3">
+        <View className="flex-1 bg-primary bg-opacity-20 rounded-lg p-3 border border-primary border-opacity-30">
           <Text className="text-xs text-muted font-semibold mb-1">BATTERY</Text>
           <Text className="text-2xl font-bold text-primary">{item.batteryLevel}%</Text>
           <View className="h-1 bg-border rounded-full mt-2 overflow-hidden">

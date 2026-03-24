@@ -64,7 +64,7 @@ export default function SettingsScreen() {
         </View>
 
         {/* Account Section */}
-        <View className="bg-white rounded-2xl p-4 border border-border mb-6">
+        <View className="bg-surface rounded-2xl p-4 border border-border mb-6">
           <Text className="text-sm font-bold text-foreground mb-4">Account</Text>
           <View className="flex-row justify-between items-center py-3 border-b border-border">
             <Text className="text-sm text-muted">Name</Text>
@@ -95,7 +95,7 @@ export default function SettingsScreen() {
         </View>
 
         {/* Notifications Section */}
-        <View className="bg-white rounded-2xl p-4 border border-border mb-6">
+        <View className="bg-surface rounded-2xl p-4 border border-border mb-6">
           <Text className="text-sm font-bold text-foreground mb-4">Push Notifications</Text>
           {renderSettingRow(
             "Critical Refill Alert",
@@ -128,7 +128,7 @@ export default function SettingsScreen() {
 
         {/* Admin-only: Thresholds Section */}
         {user?.role === "admin" && (
-          <View className="bg-white rounded-2xl p-4 border border-border mb-6">
+          <View className="bg-surface rounded-2xl p-4 border border-border mb-6">
             <Text className="text-sm font-bold text-foreground mb-4">Alert Thresholds</Text>
             <View className="mb-4">
               <View className="flex-row justify-between items-center mb-2">
@@ -163,7 +163,7 @@ export default function SettingsScreen() {
 
         {/* Admin-only: User Management Section */}
         {user?.role === "admin" && (
-          <View className="bg-white rounded-2xl p-4 border border-border mb-6">
+          <View className="bg-surface rounded-2xl p-4 border border-border mb-6">
             <View className="flex-row justify-between items-center mb-4">
               <Text className="text-sm font-bold text-foreground">Manage Users</Text>
               <Pressable
@@ -198,7 +198,7 @@ export default function SettingsScreen() {
         )}
 
         {/* About Section */}
-        <View className="bg-surface rounded-2xl p-4 border border-border mb-6">
+        <View className="bg-surface rounded-2xl p-4 border border-border mb-6 bg-opacity-50">
           <Text className="text-sm font-bold text-foreground mb-3">About</Text>
           <View className="flex-row justify-between items-center py-2 mb-2">
             <Text className="text-sm text-muted">App Version</Text>

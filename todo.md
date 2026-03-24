@@ -101,3 +101,14 @@
 - [ ] All user flows tested end-to-end
 - [ ] No console errors on iOS, Android, and Web
 - [ ] App ready for checkpoint and publishing
+
+## Color Scheme Refinement
+- [x] Update theme.config.js to use semi-transparent blue surfaces instead of white
+- [x] Update Login screen background and card colors
+- [x] Update Sign Up screen background and card colors
+- [x] Update Dashboard screen card colors
+- [x] Update Map screen card colors
+- [x] Update Analytics screen card colors
+- [x] Update History screen card colors
+- [x] Update Settings screen card colors
+- [x] Ensure text contrast is readable on all blue backgrounds

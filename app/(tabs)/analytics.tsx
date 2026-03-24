@@ -25,7 +25,7 @@ export default function AnalyticsScreen() {
   };
 
   const renderStatCard = (title: string, value: string, subtitle?: string) => (
-    <View className="flex-1 bg-white rounded-2xl p-4 border border-border">
+    <View className="flex-1 bg-surface rounded-2xl p-4 border border-border">
       <Text className="text-xs font-semibold text-muted mb-1">{title}</Text>
       <Text className="text-2xl font-bold text-primary mb-1">{value}</Text>
       {subtitle && <Text className="text-xs text-muted">{subtitle}</Text>}
@@ -53,7 +53,7 @@ export default function AnalyticsScreen() {
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
               }}
               style={{
-                backgroundColor: dateRange === range ? "#0A5BA8" : "#F5F7FA",
+                backgroundColor: dateRange === range ? "#0A5BA8" : "rgba(10, 91, 168, 0.2)",
               }}
               className="flex-1 py-2 rounded-lg border border-border"
             >
@@ -84,7 +84,7 @@ export default function AnalyticsScreen() {
           <>
             <View className="mb-6">
               <Text className="text-sm font-semibold text-foreground mb-3">Building Status</Text>
-              <View className="bg-white rounded-2xl p-4 border border-border">
+              <View className="bg-surface rounded-2xl p-4 border border-border">
                 <View className="flex-row justify-between mb-3">
                   <Text className="text-sm text-muted">Critical Alerts</Text>
                   <Text className="text-lg font-bold text-error">{analyticsData.criticalAlerts}</Text>
@@ -103,10 +103,10 @@ export default function AnalyticsScreen() {
             <View className="mb-6">
               <Text className="text-sm font-semibold text-foreground mb-3">Shift Performance</Text>
               {(["morning", "afternoon", "evening"] as const).map((shift) => (
-                <View key={shift} className="bg-white rounded-2xl p-4 border border-border mb-2">
+                <View key={shift} className="bg-surface rounded-2xl p-4 border border-border mb-2">
                   <View className="flex-row justify-between items-center mb-2">
                     <Text className="text-sm font-bold text-foreground capitalize">{shift} Shift</Text>
-                    <View className="bg-surface rounded-lg px-2 py-1">
+                    <View className="bg-primary bg-opacity-20 rounded-lg px-2 py-1 border border-primary border-opacity-30">
                       <Text className="text-xs font-semibold text-primary">
                         {shiftData[shift].refills} refills
                       </Text>
@@ -126,7 +126,7 @@ export default function AnalyticsScreen() {
         {user?.role === "maintenance" && (
           <View className="mb-6">
             <Text className="text-sm font-semibold text-foreground mb-3">Your {user.shift} Shift</Text>
-            <View className="bg-white rounded-2xl p-4 border border-border">
+            <View className="bg-surface rounded-2xl p-4 border border-border">
               <View className="flex-row justify-between mb-3">
                 <Text className="text-sm text-muted">Refills Completed</Text>
                 <Text className="text-lg font-bold text-primary">
@@ -150,9 +150,9 @@ export default function AnalyticsScreen() {
         )}
 
         {/* Chart Placeholder */}
-        <View className="bg-surface rounded-2xl p-4 border border-border mb-6">
+        <View className="bg-surface rounded-2xl p-4 border border-border mb-6 bg-opacity-50">
           <Text className="text-sm font-semibold text-foreground mb-3">Usage Trend</Text>
-          <View className="h-32 bg-white rounded-lg items-center justify-center border border-border">
+          <View className="h-32 bg-primary bg-opacity-20 rounded-lg items-center justify-center border border-primary border-opacity-30">
             <Text className="text-3xl mb-2">📊</Text>
             <Text className="text-sm text-muted">Chart visualization</Text>
           </View>

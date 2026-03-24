@@ -36,27 +36,27 @@ export default function LoginScreen() {
   };
 
   return (
-    <ScreenContainer containerClassName="bg-gradient-to-b from-primary to-secondary">
+    <ScreenContainer containerClassName="bg-background">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} className="flex-1">
         <View className="flex-1 justify-center px-6 py-8">
           {/* Logo/Header */}
           <View className="items-center mb-8">
-            <View className="w-20 h-20 bg-white rounded-full items-center justify-center mb-4">
+            <View className="w-20 h-20 bg-primary rounded-full items-center justify-center mb-4">
               <Text className="text-4xl">🧼</Text>
             </View>
-            <Text className="text-4xl font-bold text-white mb-2">SMARTSOAP</Text>
-            <Text className="text-lg text-white opacity-90">Dispenser Manager</Text>
+            <Text className="text-4xl font-bold text-foreground mb-2">SMARTSOAP</Text>
+            <Text className="text-lg text-muted">Dispenser Manager</Text>
           </View>
 
           {/* Form Card */}
-          <View className="bg-white rounded-3xl p-6 shadow-lg mb-6">
+          <View className="bg-surface rounded-3xl p-6 shadow-lg mb-6 border border-border">
             {/* Email Input */}
             <View className="mb-4">
               <Text className="text-sm font-semibold text-foreground mb-2">Email</Text>
               <TextInput
-                className="bg-surface border border-border rounded-xl px-4 py-3 text-foreground"
+                className="bg-primary bg-opacity-20 border border-primary border-opacity-40 rounded-xl px-4 py-3 text-foreground"
                 placeholder="admin@school.com"
-                placeholderTextColor="#9CA3AF"
+                placeholderTextColor="#CBD5E1"
                 keyboardType="email-address"
                 autoCapitalize="none"
                 editable={!isLoading}
@@ -70,9 +70,9 @@ export default function LoginScreen() {
             <View className="mb-6">
               <Text className="text-sm font-semibold text-foreground mb-2">Password</Text>
               <TextInput
-                className="bg-surface border border-border rounded-xl px-4 py-3 text-foreground"
+                className="bg-primary bg-opacity-20 border border-primary border-opacity-40 rounded-xl px-4 py-3 text-foreground"
                 placeholder="••••••••"
-                placeholderTextColor="#9CA3AF"
+                placeholderTextColor="#CBD5E1"
                 secureTextEntry
                 editable={!isLoading}
                 value={password}
@@ -87,7 +87,7 @@ export default function LoginScreen() {
               disabled={isLoading}
               style={({ pressed }) => [
                 {
-                  backgroundColor: isLoading ? "#9CA3AF" : "#0A5BA8",
+                  backgroundColor: isLoading ? "#6B7280" : "#0A5BA8",
                   transform: [{ scale: pressed ? 0.97 : 1 }],
                   opacity: isLoading ? 0.6 : 1,
                 },
@@ -109,10 +109,10 @@ export default function LoginScreen() {
           </View>
 
           {/* Demo Info */}
-          <View className="bg-white bg-opacity-20 rounded-2xl p-4">
-            <Text className="text-white text-xs font-semibold mb-2">📝 Demo Credentials</Text>
-            <Text className="text-white text-xs mb-1">Admin: admin@school.com / admin123</Text>
-            <Text className="text-white text-xs">Maintenance: maintenance@school.com / maint123</Text>
+          <View className="bg-surface bg-opacity-50 rounded-2xl p-4 border border-border">
+            <Text className="text-foreground text-xs font-semibold mb-2">📝 Demo Credentials</Text>
+            <Text className="text-muted text-xs mb-1">Admin: admin@school.com / admin123</Text>
+            <Text className="text-muted text-xs">Maintenance: maintenance@school.com / maint123</Text>
           </View>
         </View>
       </ScrollView>

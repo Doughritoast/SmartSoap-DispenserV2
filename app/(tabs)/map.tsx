@@ -37,7 +37,7 @@ export default function MapScreen() {
     <Pressable
       onPress={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}
       style={({ pressed }) => [{ opacity: pressed ? 0.7 : 1 }]}
-      className="bg-white rounded-xl p-3 mb-2 border border-border flex-row items-center gap-3"
+      className="bg-surface rounded-xl p-3 mb-2 border border-border flex-row items-center gap-3"
     >
       {/* Status Indicator */}
       <View
@@ -52,7 +52,7 @@ export default function MapScreen() {
       </View>
 
       {/* Status Badge */}
-      <View className="bg-surface rounded-lg px-2 py-1">
+      <View className="bg-primary bg-opacity-20 rounded-lg px-2 py-1 border border-primary border-opacity-30">
         <Text className="text-xs font-semibold text-foreground">{getStatusLabel(item.status)}</Text>
       </View>
     </Pressable>
@@ -93,12 +93,12 @@ export default function MapScreen() {
       </View>
 
       {/* Map Visualization */}
-      <View className="bg-surface rounded-2xl p-4 mb-4 border border-border">
+      <View className="bg-surface rounded-2xl p-4 mb-4 border border-border bg-opacity-50">
         <Text className="text-sm font-semibold text-foreground mb-3">Floor {selectedFloor} Layout</Text>
 
         {/* Simplified Floor Map */}
-        <View className="bg-white rounded-lg p-4 mb-3 border border-border">
-          <View className="h-40 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg items-center justify-center">
+        <View className="bg-primary bg-opacity-20 rounded-lg p-4 mb-3 border border-primary border-opacity-30">
+          <View className="h-40 bg-primary bg-opacity-10 rounded-lg items-center justify-center">
             <Text className="text-4xl mb-2">🏢</Text>
             <Text className="text-sm text-muted text-center">
               Floor {selectedFloor} - {dispensers.length} dispenser{dispensers.length !== 1 ? "s" : ""}
@@ -128,7 +128,7 @@ export default function MapScreen() {
       </View>
 
       {/* Show Offline Toggle */}
-      <View className="flex-row items-center justify-between mb-4 bg-surface rounded-lg p-3 border border-border">
+      <View className="flex-row items-center justify-between mb-4 bg-surface rounded-lg p-3 border border-border bg-opacity-50">
         <Text className="text-sm font-semibold text-foreground">Show Offline Devices</Text>
         <Pressable
           onPress={() => {
@@ -158,9 +158,9 @@ export default function MapScreen() {
           keyExtractor={(item) => item.id}
           scrollEnabled={false}
           ListEmptyComponent={
-            <View className="items-center justify-center py-4">
-              <Text className="text-sm text-muted">No dispensers on this floor</Text>
-            </View>
+          <View className="items-center justify-center py-4">
+            <Text className="text-sm text-muted">No dispensers on this floor</Text>
+          </View>
           }
         />
       </View>
