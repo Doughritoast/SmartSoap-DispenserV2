@@ -78,12 +78,13 @@ export default function MapScreen() {
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
               }}
               style={{
-                backgroundColor: selectedFloor === floor ? "#0A5BA8" : "#F5F7FA",
+                backgroundColor: selectedFloor === floor ? "#0A5BA8" : "rgba(10, 91, 168, 0.3)",
+                borderColor: selectedFloor === floor ? "#0A5BA8" : "#2D5A8C",
               }}
-              className="px-6 py-2 rounded-full border border-border"
+              className="px-6 py-2 rounded-full border"
             >
               <Text
-                className={`font-bold text-sm ${selectedFloor === floor ? "text-white" : "text-foreground"}`}
+                className="font-bold text-sm text-white"
               >
                 Floor {floor}
               </Text>

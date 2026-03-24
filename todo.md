@@ -112,3 +112,7 @@
 - [x] Update History screen card colors
 - [x] Update Settings screen card colors
 - [x] Ensure text contrast is readable on all blue backgrounds
+
+## Bug Fixes
+- [x] Fix floor selector buttons - white text on white background, should be blue with white text
+- [x] Fix History screen - add filter by event type dropdown/selector

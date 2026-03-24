@@ -103,9 +103,9 @@ export default function HistoryScreen() {
         {/* Search Bar */}
         <View className="mb-4">
           <TextInput
-            className="bg-white border border-border rounded-xl px-4 py-3 text-foreground"
+            className="bg-primary bg-opacity-20 border border-primary border-opacity-40 rounded-xl px-4 py-3 text-foreground"
             placeholder="Search by dispenser name..."
-            placeholderTextColor="#9CA3AF"
+            placeholderTextColor="#CBD5E1"
             value={searchText}
             onChangeText={setSearchText}
           />
@@ -123,12 +123,13 @@ export default function HistoryScreen() {
                   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                 }}
                 style={{
-                  backgroundColor: selectedType === type ? "#0A5BA8" : "#F5F7FA",
+                  backgroundColor: selectedType === type ? "#0A5BA8" : "rgba(10, 91, 168, 0.3)",
+                  borderColor: selectedType === type ? "#0A5BA8" : "#2D5A8C",
                 }}
-                className="px-3 py-2 rounded-full border border-border"
+                className="px-3 py-2 rounded-full border"
               >
                 <Text
-                  className={`text-xs font-semibold ${selectedType === type ? "text-white" : "text-foreground"}`}
+                  className="text-xs font-semibold text-white"
                 >
                   {type === "all"
                     ? "All"
