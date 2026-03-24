@@ -18,7 +18,13 @@ const MAPPING = {
   "paperplane.fill": "send",
   "chevron.left.forwardslash.chevron.right": "code",
   "chevron.right": "chevron-right",
-} as IconMapping;
+  // SMARTSOAP DISPENSER Tab Icons
+  "square.grid.2x2.fill": "dashboard",
+  "map.fill": "map",
+  "chart.bar.fill": "bar-chart",
+  "clock.fill": "history",
+  "ellipsis.circle.fill": "more-vert",
+} as unknown as IconMapping;
 
 /**
  * An icon component that uses native SF Symbols on iOS, and Material Icons on Android and web.
