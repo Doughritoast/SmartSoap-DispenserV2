@@ -116,3 +116,11 @@
 ## Bug Fixes
 - [x] Fix floor selector buttons - white text on white background, should be blue with white text
 - [x] Fix History screen - add filter by event type dropdown/selector
+
+## New Features & Fixes (Current Sprint)
+- [x] Add dispenser detail modal to Dashboard showing real-time metrics and "Mark Refilled" button
+- [x] Fix Dashboard filter buttons visibility (All, Floor 1, Floor 2, Floor 3 not visible until clicked)
+- [x] Fix Settings Manage Users buttons visibility (red buttons not descriptive until clicked)
+- [x] Enhance Alert Thresholds in Settings with editable options (alert levels, custom thresholds)
+- [x] Fix login persistence issue - users can't re-login after logout (invalid credentials error)
+- [x] Add user management for Admin (add new users, edit existing users, delete users)

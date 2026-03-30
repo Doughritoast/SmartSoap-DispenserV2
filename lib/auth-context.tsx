@@ -20,9 +20,15 @@ export interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   signup: (userData: Omit<User, "id">, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  updateUser: (user: User) => Promise<void>;
+  deleteUser: (email: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+// Storage keys
+const USERS_STORAGE_KEY = "registered_users";
+const CURRENT_USER_KEY = "current_user";
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -32,7 +38,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const bootstrapAsync = async () => {
       try {
-        const userJson = await AsyncStorage.getItem("user");
+        const userJson = await AsyncStorage.getItem(CURRENT_USER_KEY);
         if (userJson) {
           setUser(JSON.parse(userJson));
         }
@@ -46,41 +52,56 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     bootstrapAsync();
   }, []);
 
+  // Initialize default users if they don't exist
+  const initializeDefaultUsers = async () => {
+    try {
+      const existingUsers = await AsyncStorage.getItem(USERS_STORAGE_KEY);
+      if (!existingUsers) {
+        const defaultUsers = {
+          "admin@school.com": {
+            password: "admin123",
+            user: {
+              id: "admin-1",
+              name: "Admin User",
+              email: "admin@school.com",
+              role: "admin" as UserRole,
+            },
+          },
+          "maintenance@school.com": {
+            password: "maint123",
+            user: {
+              id: "maint-1",
+              name: "John Maintenance",
+              email: "maintenance@school.com",
+              role: "maintenance" as UserRole,
+              employeeId: "EMP001",
+              shift: "morning" as const,
+              assignedDispensers: ["disp-1", "disp-2"],
+            },
+          },
+        };
+        await AsyncStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(defaultUsers));
+      }
+    } catch (e) {
+      console.error("Failed to initialize default users", e);
+    }
+  };
+
   const login = async (email: string, password: string) => {
     setIsLoading(true);
     try {
-      // Mock authentication - in production, call your backend API
-      const mockUsers: Record<string, { password: string; user: User }> = {
-        "admin@school.com": {
-          password: "admin123",
-          user: {
-            id: "admin-1",
-            name: "Admin User",
-            email: "admin@school.com",
-            role: "admin",
-          },
-        },
-        "maintenance@school.com": {
-          password: "maint123",
-          user: {
-            id: "maint-1",
-            name: "John Maintenance",
-            email: "maintenance@school.com",
-            role: "maintenance",
-            employeeId: "EMP001",
-            shift: "morning",
-            assignedDispensers: ["disp-1", "disp-2"],
-          },
-        },
-      };
+      await initializeDefaultUsers();
+      
+      const usersJson = await AsyncStorage.getItem(USERS_STORAGE_KEY);
+      const users = usersJson ? JSON.parse(usersJson) : {};
 
-      const userRecord = mockUsers[email];
+      const userRecord = users[email];
       if (!userRecord || userRecord.password !== password) {
         throw new Error("Invalid email or password");
       }
 
       setUser(userRecord.user);
-      await AsyncStorage.setItem("user", JSON.stringify(userRecord.user));
+      await AsyncStorage.setItem(CURRENT_USER_KEY, JSON.stringify(userRecord.user));
     } finally {
       setIsLoading(false);
     }
@@ -89,14 +110,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signup = async (userData: Omit<User, "id">, password: string) => {
     setIsLoading(true);
     try {
-      // Mock signup - in production, call your backend API
+      await initializeDefaultUsers();
+
+      const usersJson = await AsyncStorage.getItem(USERS_STORAGE_KEY);
+      const users = usersJson ? JSON.parse(usersJson) : {};
+
+      // Check if user already exists
+      if (users[userData.email]) {
+        throw new Error("Email already registered");
+      }
+
+      // Create new user
       const newUser: User = {
         ...userData,
         id: `user-${Date.now()}`,
       };
 
+      // Add to users database
+      users[userData.email] = {
+        password,
+        user: newUser,
+      };
+
+      await AsyncStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(users));
       setUser(newUser);
-      await AsyncStorage.setItem("user", JSON.stringify(newUser));
+      await AsyncStorage.setItem(CURRENT_USER_KEY, JSON.stringify(newUser));
     } finally {
       setIsLoading(false);
     }
@@ -106,7 +144,38 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setIsLoading(true);
     try {
       setUser(null);
-      await AsyncStorage.removeItem("user");
+      await AsyncStorage.removeItem(CURRENT_USER_KEY);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const updateUser = async (updatedUser: User) => {
+    setIsLoading(true);
+    try {
+      const usersJson = await AsyncStorage.getItem(USERS_STORAGE_KEY);
+      const users = usersJson ? JSON.parse(usersJson) : {};
+
+      // Find and update the user
+      if (users[updatedUser.email]) {
+        users[updatedUser.email].user = updatedUser;
+        await AsyncStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(users));
+        setUser(updatedUser);
+        await AsyncStorage.setItem(CURRENT_USER_KEY, JSON.stringify(updatedUser));
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const deleteUser = async (email: string) => {
+    setIsLoading(true);
+    try {
+      const usersJson = await AsyncStorage.getItem(USERS_STORAGE_KEY);
+      const users = usersJson ? JSON.parse(usersJson) : {};
+
+      delete users[email];
+      await AsyncStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(users));
     } finally {
       setIsLoading(false);
     }
@@ -119,6 +188,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     login,
     signup,
     logout,
+    updateUser,
+    deleteUser,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
