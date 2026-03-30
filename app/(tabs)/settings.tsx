@@ -193,8 +193,8 @@ export default function SettingsScreen() {
       className="flex-row justify-between items-center py-3 border-b border-border"
     >
       <Text className="text-sm text-foreground">{label}</Text>
-      <View className="bg-primary bg-opacity-30 rounded-lg px-3 py-1 border border-primary border-opacity-50">
-        <Text className="text-sm font-bold text-primary">{thresholds[key]}%</Text>
+      <View className="bg-primary rounded-lg px-4 py-2 border border-primary border-opacity-50">
+        <Text className="text-sm font-bold text-white">{thresholds[key]}%</Text>
       </View>
     </Pressable>
   );
@@ -309,10 +309,10 @@ export default function SettingsScreen() {
         {/* Sign Out Button */}
         <Pressable
           onPress={handleLogout}
-          style={({ pressed }) => [{ opacity: pressed ? 0.7 : 1 }]}
-          className="bg-error bg-opacity-20 rounded-2xl py-4 items-center border border-error border-opacity-50 mb-6"
+          style={({ pressed }) => [{ opacity: pressed ? 0.95 : 1 }]}
+          className="bg-error rounded-2xl py-4 items-center mb-6"
         >
-          <Text className="text-error font-bold text-lg">Sign Out</Text>
+          <Text className="text-white font-bold text-lg">Sign Out</Text>
         </Pressable>
 
         {/* About Section */}

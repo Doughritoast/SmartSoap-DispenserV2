@@ -124,3 +124,7 @@
 - [x] Enhance Alert Thresholds in Settings with editable options (alert levels, custom thresholds)
 - [x] Fix login persistence issue - users can't re-login after logout (invalid credentials error)
 - [x] Add user management for Admin (add new users, edit existing users, delete users)
+
+## Visibility Bug Fixes (Current)
+- [x] Fix Alert Thresholds value buttons - text not visible in blue pills
+- [x] Fix Sign Out button - text not visible
