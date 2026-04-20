@@ -128,3 +128,19 @@
 ## Visibility Bug Fixes (Current)
 - [x] Fix Alert Thresholds value buttons - text not visible in blue pills
 - [x] Fix Sign Out button - text not visible
+
+## Firebase Integration (Current Sprint)
+- [x] Install Firebase dependencies (firebase, @react-native-firebase packages)
+- [x] Create Firebase configuration file with credentials
+- [x] Set up environment variables for Firebase
+- [x] Update auth context to use Firebase Authentication
+- [x] Create Firestore data models and collections
+- [x] Create Firestore migration utilities
+- [x] Update root layout to use Firebase auth provider
+- [x] Create Firebase integration tests
+- [x] Create Firebase integration guide documentation
+- [ ] Migrate user data from AsyncStorage to Firestore (manual step)
+- [ ] Migrate dispenser data to Firestore (manual step)
+- [ ] Migrate event history to Firestore (manual step)
+- [ ] Set up real-time listeners for live data updates (next phase)
+- [ ] Test Firebase authentication and data sync (next phase)
