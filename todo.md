@@ -139,8 +139,9 @@
 - [x] Update root layout to use Firebase auth provider
 - [x] Create Firebase integration tests
 - [x] Create Firebase integration guide documentation
-- [ ] Migrate user data from AsyncStorage to Firestore (manual step)
-- [ ] Migrate dispenser data to Firestore (manual step)
-- [ ] Migrate event history to Firestore (manual step)
-- [ ] Set up real-time listeners for live data updates (next phase)
-- [ ] Test Firebase authentication and data sync (next phase)
+- [x] Add migration initialization code to app/index.tsx (Step 1 complete)
+- [x] Create Firebase migration tests
+- [ ] Run app to trigger data migration (Step 2 - user action)
+- [ ] Verify data in Firebase Console (Step 2 - user action)
+- [ ] Set Firestore security rules (Step 3 - user action)
+- [ ] Test Firebase authentication and data sync (Step 4 - user action)
