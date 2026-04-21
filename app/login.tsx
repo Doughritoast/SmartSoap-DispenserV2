@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ScrollView, Text, View, TextInput, Pressable, Alert } from "react-native";
 import { ScreenContainer } from "@/components/screen-container";
-import { useAuth } from "@/lib/auth-context";
+import { useFirebaseAuth } from "@/lib/firebase-auth-context";
 import { useRouter } from "expo-router";
 import * as Haptics from "expo-haptics";
 
@@ -9,7 +9,7 @@ export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
+  const { signIn } = useFirebaseAuth();
   const router = useRouter();
 
   const handleLogin = async () => {
@@ -21,7 +21,7 @@ export default function LoginScreen() {
     setIsLoading(true);
     try {
       await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-      await login(email, password);
+      await signIn(email, password);
       router.replace("/(tabs)");
     } catch (error) {
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ScrollView, Text, View, TextInput, Pressable, Alert } from "react-native";
 import { ScreenContainer } from "@/components/screen-container";
-import { useAuth, type UserRole } from "@/lib/auth-context";
+import { useFirebaseAuth, type UserRole } from "@/lib/firebase-auth-context";
 import { useRouter } from "expo-router";
 import * as Haptics from "expo-haptics";
 
@@ -14,7 +14,7 @@ export default function SignUpScreen() {
   const [employeeId, setEmployeeId] = useState("");
   const [shift, setShift] = useState<"morning" | "afternoon" | "evening">("morning");
   const [isLoading, setIsLoading] = useState(false);
-  const { signup } = useAuth();
+  const { signUp } = useFirebaseAuth();
   const router = useRouter();
 
   const handleSignUp = async () => {
@@ -36,15 +36,12 @@ export default function SignUpScreen() {
     setIsLoading(true);
     try {
       await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-      await signup(
-        {
-          name,
-          email,
-          role,
-          ...(role === "maintenance" && { employeeId, shift }),
-        },
-        password,
-      );
+      await signUp(email, password, {
+        fullName: name,
+        role,
+        employeeId: role === "maintenance" ? employeeId : undefined,
+        shiftAssignment: role === "maintenance" ? (shift.charAt(0).toUpperCase() + shift.slice(1) as "Morning" | "Afternoon" | "Evening") : undefined,
+      });
       router.replace("/(tabs)");
     } catch (error) {
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
