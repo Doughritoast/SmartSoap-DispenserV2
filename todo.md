@@ -128,3 +128,14 @@
 ## Visibility Bug Fixes (Current)
 - [x] Fix Alert Thresholds value buttons - text not visible in blue pills
 - [x] Fix Sign Out button - text not visible
+
+
+## Firebase Firestore Integration (In Progress)
+- [ ] Install Firebase dependencies
+- [ ] Create Firebase configuration
+- [ ] Set up environment variables
+- [ ] Update auth context for Firebase
+- [ ] Migrate to Firestore for data storage
+- [ ] Set up real-time listeners
+- [ ] Configure security rules
+- [ ] Test multi-device sync
