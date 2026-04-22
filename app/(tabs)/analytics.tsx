@@ -24,6 +24,9 @@ export default function AnalyticsScreen() {
     evening: { refills: 5, avgTime: "12 min", alerts: 0 },
   };
 
+  // Type guard for shift property
+  const userShift = user?.shift as keyof typeof shiftData | undefined;
+
   const renderStatCard = (title: string, value: string, subtitle?: string) => (
     <View className="flex-1 bg-surface rounded-2xl p-4 border border-border">
       <Text className="text-xs font-semibold text-muted mb-1">{title}</Text>
@@ -123,26 +126,26 @@ export default function AnalyticsScreen() {
         )}
 
         {/* Maintenance: Shift Stats */}
-        {user?.role === "maintenance" && (
+        {user?.role === "maintenance" && userShift && (
           <View className="mb-6">
-            <Text className="text-sm font-semibold text-foreground mb-3">Your {user.shift} Shift</Text>
+            <Text className="text-sm font-semibold text-foreground mb-3">Your {userShift} Shift</Text>
             <View className="bg-surface rounded-2xl p-4 border border-border">
               <View className="flex-row justify-between mb-3">
                 <Text className="text-sm text-muted">Refills Completed</Text>
                 <Text className="text-lg font-bold text-primary">
-                  {shiftData[user.shift as keyof typeof shiftData].refills}
+                  {shiftData[userShift].refills}
                 </Text>
               </View>
               <View className="flex-row justify-between mb-3">
                 <Text className="text-sm text-muted">Average Time per Refill</Text>
                 <Text className="text-lg font-bold text-primary">
-                  {shiftData[user.shift as keyof typeof shiftData].avgTime}
+                  {shiftData[userShift].avgTime}
                 </Text>
               </View>
               <View className="flex-row justify-between">
                 <Text className="text-sm text-muted">Critical Alerts</Text>
                 <Text className="text-lg font-bold text-error">
-                  {shiftData[user.shift as keyof typeof shiftData].alerts}
+                  {shiftData[userShift].alerts}
                 </Text>
               </View>
             </View>
