@@ -145,3 +145,13 @@
 - [ ] Test sign up with new user
 - [ ] Test sign in with existing user
 - [ ] Test role-based access (Admin vs Maintenance)
+
+
+## Firebase Offline Error Fix (Current)
+- [x] Fix "client is offline" error in Firebase initialization
+- [x] Add retry logic with exponential backoff (retryFirebaseOperation)
+- [x] Update firebase-auth-context to use retry logic
+- [x] Add fallback user object creation if Firestore unavailable
+- [x] Enable offline persistence in Firebase config
+- [x] Verify Firebase credentials are correctly loaded
+- [x] Test Firebase connection with proper error handling

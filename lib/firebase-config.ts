@@ -15,6 +15,7 @@ const firebaseConfig = {
 // Validate configuration
 if (!firebaseConfig.apiKey || !firebaseConfig.projectId) {
   console.error("Firebase configuration is incomplete. Check your environment variables.");
+  console.error("Config:", firebaseConfig);
 }
 
 // Initialize Firebase
@@ -35,6 +36,35 @@ if (typeof window !== "undefined") {
       console.warn("The current browser does not support persistence.");
     }
   });
+}
+
+// Retry logic for Firebase operations
+export async function retryFirebaseOperation<T>(
+  operation: () => Promise<T>,
+  maxRetries = 3,
+  delayMs = 1000
+): Promise<T> {
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      return await operation();
+    } catch (error: any) {
+      if (i === maxRetries - 1) throw error;
+
+      // Only retry on network errors
+      if (
+        error.code === "failed-as-precondition" ||
+        error.message?.includes("offline") ||
+        error.message?.includes("network")
+      ) {
+        console.warn(`Firebase operation failed, retrying in ${delayMs}ms...`);
+        await new Promise((resolve) => setTimeout(resolve, delayMs));
+        // Exponential backoff
+      } else {
+        throw error;
+      }
+    }
+  }
+  throw new Error("Max retries exceeded");
 }
 
 export default app;

@@ -6,7 +6,7 @@ import {
   onAuthStateChanged,
   User,
 } from "firebase/auth";
-import { auth, db } from "./firebase-config";
+import { auth, db, retryFirebaseOperation } from "./firebase-config";
 import { doc, getDoc, setDoc, collection, query, where, getDocs } from "firebase/firestore";
 
 export type UserRole = "admin" | "maintenance";
@@ -41,15 +41,20 @@ export function FirebaseAuthProvider({ children }: { children: React.ReactNode }
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       try {
         if (firebaseUser) {
-          // Fetch user data from Firestore
+          // Fetch user data from Firestore with retry logic
           const userDocRef = doc(db, "users", firebaseUser.uid);
-          const userDocSnap = await getDoc(userDocRef);
+          const userDocSnap = await retryFirebaseOperation(
+            () => getDoc(userDocRef),
+            3,
+            500
+          );
 
           if (userDocSnap.exists()) {
             const userData = userDocSnap.data() as UserData;
             setUser(userData);
           } else {
-            // User exists in Auth but not in Firestore
+            // User exists in Auth but not in Firestore - create minimal user object
+            console.warn("User not found in Firestore, creating minimal user object");
             setUser({
               uid: firebaseUser.uid,
               email: firebaseUser.email || "",
@@ -63,6 +68,7 @@ export function FirebaseAuthProvider({ children }: { children: React.ReactNode }
         }
       } catch (error) {
         console.error("Error loading user data:", error);
+        // Don't block the app on error - user can still proceed
         setUser(null);
       } finally {
         setIsLoading(false);
@@ -77,17 +83,22 @@ export function FirebaseAuthProvider({ children }: { children: React.ReactNode }
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const firebaseUser = userCredential.user;
 
-      // Save user data to Firestore
+      // Save user data to Firestore with retry logic
       const userDocRef = doc(db, "users", firebaseUser.uid);
-      await setDoc(userDocRef, {
-        uid: firebaseUser.uid,
-        email,
-        role: userData.role || "maintenance",
-        fullName: userData.fullName || "",
-        employeeId: userData.employeeId || "",
-        shiftAssignment: userData.shiftAssignment || "Morning",
-        createdAt: new Date(),
-      });
+      await retryFirebaseOperation(
+        () =>
+          setDoc(userDocRef, {
+            uid: firebaseUser.uid,
+            email,
+            role: userData.role || "maintenance",
+            fullName: userData.fullName || "",
+            employeeId: userData.employeeId || "",
+            shiftAssignment: userData.shiftAssignment || "Morning",
+            createdAt: new Date(),
+          }),
+        3,
+        500
+      );
 
       setUser({
         uid: firebaseUser.uid,
@@ -99,6 +110,7 @@ export function FirebaseAuthProvider({ children }: { children: React.ReactNode }
         createdAt: new Date(),
       });
     } catch (error: any) {
+      console.error("Sign up error:", error);
       throw new Error(error.message || "Sign up failed");
     }
   };
@@ -108,17 +120,30 @@ export function FirebaseAuthProvider({ children }: { children: React.ReactNode }
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const firebaseUser = userCredential.user;
 
-      // Fetch user data from Firestore
+      // Fetch user data from Firestore with retry logic
       const userDocRef = doc(db, "users", firebaseUser.uid);
-      const userDocSnap = await getDoc(userDocRef);
+      const userDocSnap = await retryFirebaseOperation(
+        () => getDoc(userDocRef),
+        3,
+        500
+      );
 
       if (userDocSnap.exists()) {
         const userData = userDocSnap.data() as UserData;
         setUser(userData);
       } else {
-        throw new Error("User data not found in Firestore");
+        // Create minimal user object if not in Firestore
+        console.warn("User not found in Firestore after sign in");
+        setUser({
+          uid: firebaseUser.uid,
+          email: firebaseUser.email || "",
+          role: "maintenance",
+          fullName: firebaseUser.displayName || "User",
+          createdAt: new Date(),
+        });
       }
     } catch (error: any) {
+      console.error("Sign in error:", error);
       throw new Error(error.message || "Sign in failed");
     }
   };
@@ -128,6 +153,7 @@ export function FirebaseAuthProvider({ children }: { children: React.ReactNode }
       await signOut(auth);
       setUser(null);
     } catch (error: any) {
+      console.error("Sign out error:", error);
       throw new Error(error.message || "Sign out failed");
     }
   };
