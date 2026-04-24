@@ -39,7 +39,7 @@ export default function AnalyticsScreen() {
         <View className="mb-4">
           <Text className="text-3xl font-bold text-foreground">Analytics</Text>
           <Text className="text-sm text-muted">
-            {user?.role === "admin" ? "Building Overview" : `${user?.shift} Shift Stats`}
+            {user?.role === "admin" ? "Building Overview" : `${user?.shiftAssignment} Shift Stats`}
           </Text>
         </View>
 
