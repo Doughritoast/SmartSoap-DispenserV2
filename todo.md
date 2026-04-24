@@ -137,7 +137,11 @@
 - [x] Update auth context for Firebase (lib/firebase-auth-context.tsx)
 - [x] Update root layout to use Firebase auth provider
 - [x] Create Firebase credentials validation tests (all 6 passing)
-- [ ] Migrate to Firestore for data storage (next step)
-- [ ] Set up real-time listeners for live data (next step)
-- [ ] Configure security rules (next step)
-- [ ] Test multi-device sync (next step)
+- [x] Create Firebase initialization script (lib/firebase-init.ts)
+- [x] Create Firestore users collection with test data (admin@school.com, maintenance@school.com)
+- [x] Create Firestore dispensers collection with 6 test dispensers
+- [x] Create Firestore events collection with test events
+- [x] Add Firebase database initialization to app startup
+- [ ] Test sign up with new user
+- [ ] Test sign in with existing user
+- [ ] Test role-based access (Admin vs Maintenance)
