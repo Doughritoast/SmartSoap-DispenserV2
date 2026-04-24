@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { ScrollView, Text, View, Pressable, Switch, Alert, TextInput, Modal, FlatList } from "react-native";
 import { ScreenContainer } from "@/components/screen-container";
-import { useAuth } from "@/lib/auth-context";
+import { useFirebaseAuth } from "@/lib/firebase-auth-context";
 import { useRouter } from "expo-router";
 import * as Haptics from "expo-haptics";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function SettingsScreen() {
-  const { user, logout, deleteUser } = useAuth();
+  const { user, signOut } = useFirebaseAuth();
   const router = useRouter();
 
   // Notification preferences
@@ -70,7 +70,7 @@ export default function SettingsScreen() {
         text: "Sign Out",
         onPress: async () => {
           await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-          await logout();
+          await signOut();
           router.replace("/login");
         },
         style: "destructive",
@@ -134,7 +134,15 @@ export default function SettingsScreen() {
         text: "Delete",
         onPress: async () => {
           try {
-            await deleteUser(email);
+            // Delete user from Firebase (implement in Firebase auth context)
+            // For now, just remove from local storage
+            const usersJson = await AsyncStorage.getItem('registered_users');
+            if (usersJson) {
+              const users = JSON.parse(usersJson);
+              const updatedUsers = users.filter((u: any) => u.email !== email);
+              await AsyncStorage.setItem('registered_users', JSON.stringify(updatedUsers));
+              setAllUsers(updatedUsers);
+            }
             setAllUsers(allUsers.filter((u) => u.email !== email));
             Alert.alert("Success", "User deleted successfully");
             await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
@@ -213,7 +221,7 @@ export default function SettingsScreen() {
           <Text className="text-sm font-bold text-foreground mb-4">Account</Text>
           <View className="flex-row justify-between items-center py-3 border-b border-border">
             <Text className="text-sm text-muted">Name</Text>
-            <Text className="text-sm font-semibold text-foreground">{user?.name || "N/A"}</Text>
+            <Text className="text-sm font-semibold text-foreground">{user?.fullName || "N/A"}</Text>
           </View>
           <View className="flex-row justify-between items-center py-3 border-b border-border">
             <Text className="text-sm text-muted">Email</Text>

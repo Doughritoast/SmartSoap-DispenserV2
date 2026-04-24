@@ -1,12 +1,12 @@
 import { useState, useEffect, useMemo } from "react";
 import { ScrollView, Text, View, Pressable, RefreshControl, FlatList, Modal } from "react-native";
 import { ScreenContainer } from "@/components/screen-container";
-import { useAuth } from "@/lib/auth-context";
+import { useFirebaseAuth } from "@/lib/firebase-auth-context";
 import { MOCK_DISPENSERS, getStatusColor, getStatusLabel, type Dispenser } from "@/lib/mock-data";
 import * as Haptics from "expo-haptics";
 
 export default function DashboardScreen() {
-  const { user } = useAuth();
+  const { user } = useFirebaseAuth();
   const [dispensers, setDispensers] = useState<Dispenser[]>([]);
   const [refreshing, setRefreshing] = useState(false);
   const [selectedFloor, setSelectedFloor] = useState<number | null>(null);
@@ -19,7 +19,7 @@ export default function DashboardScreen() {
 
     // Maintenance users only see assigned dispensers
     if (user?.role === "maintenance") {
-      filtered = filtered.filter((d) => d.assignedTo.includes(user.id));
+      filtered = filtered.filter((d) => d.assignedTo.includes(user?.uid));
     }
 
     // Filter by floor if selected

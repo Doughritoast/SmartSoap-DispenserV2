@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { ScrollView, Text, View, Pressable } from "react-native";
 import { ScreenContainer } from "@/components/screen-container";
-import { useAuth } from "@/lib/auth-context";
+import { useFirebaseAuth } from "@/lib/firebase-auth-context";
 import * as Haptics from "expo-haptics";
 
 export default function AnalyticsScreen() {
-  const { user } = useAuth();
+  const { user } = useFirebaseAuth();
   const [dateRange, setDateRange] = useState<"week" | "month" | "all">("week");
 
   // Mock analytics data
@@ -23,9 +23,6 @@ export default function AnalyticsScreen() {
     afternoon: { refills: 12, avgTime: "18 min", alerts: 2 },
     evening: { refills: 5, avgTime: "12 min", alerts: 0 },
   };
-
-  // Type guard for shift property
-  const userShift = user?.shift as keyof typeof shiftData | undefined;
 
   const renderStatCard = (title: string, value: string, subtitle?: string) => (
     <View className="flex-1 bg-surface rounded-2xl p-4 border border-border">
@@ -126,26 +123,26 @@ export default function AnalyticsScreen() {
         )}
 
         {/* Maintenance: Shift Stats */}
-        {user?.role === "maintenance" && userShift && (
+        {user?.role === "maintenance" && (
           <View className="mb-6">
-            <Text className="text-sm font-semibold text-foreground mb-3">Your {userShift} Shift</Text>
+            <Text className="text-sm font-semibold text-foreground mb-3">Your {user?.shiftAssignment} Shift</Text>
             <View className="bg-surface rounded-2xl p-4 border border-border">
               <View className="flex-row justify-between mb-3">
                 <Text className="text-sm text-muted">Refills Completed</Text>
                 <Text className="text-lg font-bold text-primary">
-                  {shiftData[userShift].refills}
+                  {shiftData[user?.shiftAssignment as keyof typeof shiftData].refills}
                 </Text>
               </View>
               <View className="flex-row justify-between mb-3">
                 <Text className="text-sm text-muted">Average Time per Refill</Text>
                 <Text className="text-lg font-bold text-primary">
-                  {shiftData[userShift].avgTime}
+                  {shiftData[user?.shiftAssignment as keyof typeof shiftData].avgTime}
                 </Text>
               </View>
               <View className="flex-row justify-between">
                 <Text className="text-sm text-muted">Critical Alerts</Text>
                 <Text className="text-lg font-bold text-error">
-                  {shiftData[userShift].alerts}
+                  {shiftData[user?.shiftAssignment as keyof typeof shiftData].alerts}
                 </Text>
               </View>
             </View>

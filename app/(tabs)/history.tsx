@@ -1,12 +1,12 @@
 import { useState, useMemo } from "react";
 import { ScrollView, Text, View, Pressable, TextInput, FlatList, RefreshControl } from "react-native";
 import { ScreenContainer } from "@/components/screen-container";
-import { useAuth } from "@/lib/auth-context";
+import { useFirebaseAuth } from "@/lib/firebase-auth-context";
 import { MOCK_EVENTS, getEventTypeIcon, getEventTypeLabel, type Event } from "@/lib/mock-data";
 import * as Haptics from "expo-haptics";
 
 export default function HistoryScreen() {
-  const { user } = useAuth();
+  const { user } = useFirebaseAuth();
   const [searchText, setSearchText] = useState("");
   const [selectedType, setSelectedType] = useState<Event["type"] | "all">("all");
   const [refreshing, setRefreshing] = useState(false);
@@ -30,7 +30,7 @@ export default function HistoryScreen() {
     if (user?.role === "maintenance") {
       const assignedIds = new Set(
         MOCK_EVENTS.filter((e) =>
-          MOCK_EVENTS.some((evt) => evt.dispenserId === e.dispenserId && user.id),
+          MOCK_EVENTS.some((evt) => evt.dispenserId === e.dispenserId && user?.uid),
         ).map((e) => e.dispenserId),
       );
       filtered = filtered.filter((e) => assignedIds.has(e.dispenserId));

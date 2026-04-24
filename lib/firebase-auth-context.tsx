@@ -28,6 +28,7 @@ interface AuthContextType {
   signUp: (email: string, password: string, userData: Partial<UserData>) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
   signOutUser: () => Promise<void>;
+  signOut: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -140,6 +141,7 @@ export function FirebaseAuthProvider({ children }: { children: React.ReactNode }
         signUp,
         signIn,
         signOutUser,
+        signOut: signOutUser,
       }}
     >
       {children}

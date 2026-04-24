@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { ScrollView, Text, View, Pressable, FlatList } from "react-native";
 import { ScreenContainer } from "@/components/screen-container";
-import { useAuth } from "@/lib/auth-context";
+import { useFirebaseAuth } from "@/lib/firebase-auth-context";
 import { MOCK_DISPENSERS, getStatusColor, getStatusLabel, type Dispenser } from "@/lib/mock-data";
 import * as Haptics from "expo-haptics";
 
 export default function MapScreen() {
-  const { user } = useAuth();
+  const { user } = useFirebaseAuth();
   const [selectedFloor, setSelectedFloor] = useState(1);
   const [dispensers, setDispensers] = useState<Dispenser[]>([]);
   const [showOffline, setShowOffline] = useState(true);
@@ -17,7 +17,7 @@ export default function MapScreen() {
 
     // Maintenance users only see assigned dispensers
     if (user?.role === "maintenance") {
-      filtered = filtered.filter((d) => d.assignedTo.includes(user.id));
+      filtered = filtered.filter((d) => d.assignedTo.includes(user?.uid));
     }
 
     // Filter by floor
