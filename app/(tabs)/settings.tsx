@@ -225,7 +225,7 @@ export default function SettingsScreen() {
           </View>
           <View className="flex-row justify-between items-center py-3 border-b border-border">
             <Text className="text-sm text-muted">Email</Text>
-            <Text className="text-sm font-semibold text-foreground">{user?.email}</Text>
+            <Text className="text-sm font-semibold text-foreground">{user?.email || "N/A"}</Text>
           </View>
           <View className="flex-row justify-between items-center py-3">
             <Text className="text-sm text-muted">Role</Text>

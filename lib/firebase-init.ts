@@ -1,4 +1,4 @@
-import { db, auth } from "./firebase-config";
+import { db, auth, retryFirebaseOperation } from "./firebase-config";
 import {
   collection,
   doc,
@@ -6,6 +6,7 @@ import {
   getDocs,
   query,
   where,
+  serverTimestamp,
 } from "firebase/firestore";
 import {
   createUserWithEmailAndPassword,
@@ -18,77 +19,101 @@ import {
  */
 export async function initializeFirebaseDatabase() {
   try {
-    console.log("Initializing Firebase database...");
+    console.log("🔄 Initializing Firebase database...");
 
     // Check if users collection exists and has data
-    const usersSnapshot = await getDocs(collection(db, "users"));
+    const usersSnapshot = await retryFirebaseOperation(
+      () => getDocs(collection(db, "users")),
+      3,
+      1000
+    );
     
     if (usersSnapshot.empty) {
-      console.log("Creating test users...");
+      console.log("📝 Creating test users...");
       
       // Create admin user
       try {
-        const adminUserCred = await createUserWithEmailAndPassword(
-          auth,
-          "admin@school.com",
-          "admin123"
+        const adminUserCred = await retryFirebaseOperation(
+          () => createUserWithEmailAndPassword(
+            auth,
+            "admin@school.com",
+            "admin123"
+          ),
+          3,
+          1000
         );
         
-        await setDoc(doc(db, "users", adminUserCred.user.uid), {
-          uid: adminUserCred.user.uid,
-          email: "admin@school.com",
-          role: "admin",
-          fullName: "Admin User",
-          createdAt: new Date(),
-        });
+        await retryFirebaseOperation(
+          () => setDoc(doc(db, "users", adminUserCred.user.uid), {
+            uid: adminUserCred.user.uid,
+            email: "admin@school.com",
+            role: "admin",
+            fullName: "Admin User",
+            createdAt: serverTimestamp(),
+          }),
+          3,
+          1000
+        );
         
-        console.log("✓ Admin user created");
+        console.log("✅ Admin user created");
       } catch (error: any) {
         if (error.code === "auth/email-already-in-use") {
-          console.log("✓ Admin user already exists");
+          console.log("✅ Admin user already exists");
         } else {
-          console.error("Error creating admin user:", error);
+          console.error("❌ Error creating admin user:", error.message);
         }
       }
 
       // Create maintenance user
       try {
-        const maintenanceUserCred = await createUserWithEmailAndPassword(
-          auth,
-          "maintenance@school.com",
-          "maint123"
+        const maintenanceUserCred = await retryFirebaseOperation(
+          () => createUserWithEmailAndPassword(
+            auth,
+            "maintenance@school.com",
+            "maint123"
+          ),
+          3,
+          1000
         );
         
-        await setDoc(doc(db, "users", maintenanceUserCred.user.uid), {
-          uid: maintenanceUserCred.user.uid,
-          email: "maintenance@school.com",
-          role: "maintenance",
-          fullName: "John Maintenance",
-          employeeId: "EMP001",
-          shiftAssignment: "Morning",
-          createdAt: new Date(),
-        });
+        await retryFirebaseOperation(
+          () => setDoc(doc(db, "users", maintenanceUserCred.user.uid), {
+            uid: maintenanceUserCred.user.uid,
+            email: "maintenance@school.com",
+            role: "maintenance",
+            fullName: "John Maintenance",
+            employeeId: "EMP001",
+            shiftAssignment: "Morning",
+            createdAt: serverTimestamp(),
+          }),
+          3,
+          1000
+        );
         
-        console.log("✓ Maintenance user created");
+        console.log("✅ Maintenance user created");
       } catch (error: any) {
         if (error.code === "auth/email-already-in-use") {
-          console.log("✓ Maintenance user already exists");
+          console.log("✅ Maintenance user already exists");
         } else {
-          console.error("Error creating maintenance user:", error);
+          console.error("❌ Error creating maintenance user:", error.message);
         }
       }
 
       // Sign out the last created user
       await signOut(auth);
     } else {
-      console.log("✓ Users collection already exists with", usersSnapshot.size, "users");
+      console.log(`✅ Users collection exists with ${usersSnapshot.size} users`);
     }
 
     // Check if dispensers collection exists
-    const dispensersSnapshot = await getDocs(collection(db, "dispensers"));
+    const dispensersSnapshot = await retryFirebaseOperation(
+      () => getDocs(collection(db, "dispensers")),
+      3,
+      1000
+    );
     
     if (dispensersSnapshot.empty) {
-      console.log("Creating test dispensers...");
+      console.log("📝 Creating test dispensers...");
       
       const dispensers = [
         {
@@ -166,19 +191,27 @@ export async function initializeFirebaseDatabase() {
       ];
 
       for (const dispenser of dispensers) {
-        await setDoc(doc(db, "dispensers", dispenser.id), dispenser);
+        await retryFirebaseOperation(
+          () => setDoc(doc(db, "dispensers", dispenser.id), dispenser),
+          3,
+          1000
+        );
       }
       
-      console.log("✓ Created", dispensers.length, "test dispensers");
+      console.log(`✅ Created ${dispensers.length} test dispensers`);
     } else {
-      console.log("✓ Dispensers collection already exists with", dispensersSnapshot.size, "dispensers");
+      console.log(`✅ Dispensers collection exists with ${dispensersSnapshot.size} dispensers`);
     }
 
     // Check if events collection exists
-    const eventsSnapshot = await getDocs(collection(db, "events"));
+    const eventsSnapshot = await retryFirebaseOperation(
+      () => getDocs(collection(db, "events")),
+      3,
+      1000
+    );
     
     if (eventsSnapshot.empty) {
-      console.log("Creating test events...");
+      console.log("📝 Creating test events...");
       
       const events = [
         {
@@ -216,18 +249,22 @@ export async function initializeFirebaseDatabase() {
       ];
 
       for (const event of events) {
-        await setDoc(doc(db, "events", event.id), event);
+        await retryFirebaseOperation(
+          () => setDoc(doc(db, "events", event.id), event),
+          3,
+          1000
+        );
       }
       
-      console.log("✓ Created", events.length, "test events");
+      console.log(`✅ Created ${events.length} test events`);
     } else {
-      console.log("✓ Events collection already exists with", eventsSnapshot.size, "events");
+      console.log(`✅ Events collection exists with ${eventsSnapshot.size} events`);
     }
 
-    console.log("✓ Firebase database initialization complete!");
+    console.log("✅ Firebase database initialization complete!");
     return true;
   } catch (error) {
-    console.error("Error initializing Firebase database:", error);
+    console.error("❌ Error initializing Firebase database:", error);
     return false;
   }
 }
